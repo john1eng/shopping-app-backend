@@ -25,9 +25,6 @@ app.use("/", sellerRoutes);
 app.use("/", buyerRoutes);
 app.use("/", productRoutes);
 app.use("/", orderRoutes);
-// app.get("/", (req, res) => {
-//   res.send("Hello World!!!!");
-// });
 
 Product.belongsTo(Seller, { constraints: true, onDelete: "CASCADE" });
 Seller.hasMany(Product);
@@ -46,14 +43,6 @@ OrderItem.belongsTo(Order);
 sequelize
   // .sync({ force: true })
   .sync()
-  // .then(()=>Buyer.create({name:"frog"}))
-  // .then(buyer => {console.log(buyer);return buyer.createCart()})
-  // .then(()=>Buyer.findAll({where:{name:"frog"}}))
-  // .then((buyer) => buyer[0].getCart())
-  // .then(r => console.log(r))
   .then((result) => app.listen(3000))
   .catch((err) => console.log(err));
 
-// app.listen(port, () => {
-//   console.log(`Example app listening at http://localhost:${port}`)
-// })
