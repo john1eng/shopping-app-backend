@@ -24,7 +24,9 @@ router.delete("/buyer", async (req, res, next) => {
     const result = await buyer.destroy();
     return res.status(200).json(result);
   } catch (e){
-    return res.status(400).json(e);
+    e.message = "No such buyer"
+    e.statusCode = 400;
+    next(e);
   }
 });
 
@@ -34,7 +36,8 @@ router.get("/buyer", async (req, res, next) => {
     const buyers = await Buyer.findAll();
     return res.status(201).json(buyers);
   } catch(e){
-    return res.status(400).json(e);
+    e.statusCode = 400;
+    next(e)
   }
 });
 
@@ -42,9 +45,15 @@ router.get("/buyer", async (req, res, next) => {
 router.get("/buyer/:buyerId", async (req, res, next) => {
   try{
     const buyer = await Buyer.findAll({where: {id: req.params.buyerId}});
+    console.log(buyer.length);
+    if(buyer.length == 0){
+      const error = new Error('Could not find buyer')
+      error.statusCode = 400;
+      throw error;
+    }
     return res.status(200).json(buyer[0]);
   } catch (e) {
-    return res.status(400).json(e);
+    next(e)
   }
 });
 module.exports = router;
